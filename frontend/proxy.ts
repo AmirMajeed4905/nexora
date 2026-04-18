@@ -4,7 +4,7 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("refreshToken")?.value;
   const { pathname } = request.nextUrl;
 
-  const protectedRoutes = ["/cart", "/wishlist", "/checkout", "/orders", "/account"];
+  const protectedRoutes = [ "/wishlist", "/checkout", "/orders"];
   const adminRoutes = ["/admin"];
   const authRoutes = ["/login", "/register"];
 
