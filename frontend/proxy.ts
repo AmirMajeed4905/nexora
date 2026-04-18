@@ -8,18 +8,19 @@ export function proxy(request: NextRequest) {
   const adminRoutes = ["/admin"];
   const authRoutes = ["/login", "/register"];
 
-  // Protected route + no token → login pe bhejo
+  // Protected route + no token → login
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // Admin route + no token → login pe bhejo
+  // Admin + no token → login
   if (adminRoutes.some((route) => pathname.startsWith(route)) && !token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Auth route + token hai → home pe bhejo
-  // Lekin sirf tab jab token genuinely valid ho
+  // Already logged in → home (auth pages)
   if (authRoutes.some((route) => pathname === route) && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
